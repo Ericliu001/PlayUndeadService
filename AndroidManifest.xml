@@ -32,8 +32,6 @@
                 </action>
             </intent-filter>
             
-             <intent-filter>
-            </intent-filter>
         </receiver>
     </application>
 

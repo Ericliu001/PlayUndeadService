@@ -17,13 +17,11 @@ import android.util.Log;
 public class MessageService extends Service {
 	public static final String MESSAGE = "message";
 	private int i = 0;
-	
+
 	volatile Looper mServiceLooper;
 	volatile ServiceHandler mServiceHander;
 
 	private static class ServiceHandler extends Handler {
-		
-		
 
 		public ServiceHandler(Looper looper) {
 			super(looper);
@@ -31,11 +29,21 @@ public class MessageService extends Service {
 
 		@Override
 		public void handleMessage(Message msg) {
-			Bundle args = (Bundle) msg.obj;
-			String messageString = args.getString(MESSAGE);
-				Log.i("eric", messageString);
+			Bundle args = new Bundle();
+			if (msg.obj != null) {
 				
-				
+				 args = (Bundle) msg.obj;
+			}
+	
+			
+			
+			
+			if (args.getString(MESSAGE) != null) {
+
+				Log.i("eric", args.getString(MESSAGE));
+			}
+
+
 		}
 	}
 
@@ -45,7 +53,7 @@ public class MessageService extends Service {
 
 		HandlerThread thread = new HandlerThread("UndeadServiceThread",
 				Process.THREAD_PRIORITY_FOREGROUND);
-		
+
 		thread.start();
 		mServiceLooper = thread.getLooper();
 		mServiceHander = new ServiceHandler(mServiceLooper);
@@ -54,26 +62,22 @@ public class MessageService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		
 		Message msg = mServiceHander.obtainMessage();
 		msg.arg1 = startId;
 		msg.arg2 = flags;
 		msg.obj = intent.getExtras();
-		
-		
+
 		mServiceHander.sendMessage(msg);
-		
+
 		return START_REDELIVER_INTENT;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		mServiceLooper.quit();
-		
-		
+
 		super.onDestroy();
-		
-		
+
 	}
 
 	@Override

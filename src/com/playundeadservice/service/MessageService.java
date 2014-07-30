@@ -69,7 +69,7 @@ public class MessageService extends Service {
 
 		mServiceHander.sendMessage(msg);
 
-		return START_REDELIVER_INTENT;
+		return START_STICKY;
 	}
 
 	@Override
